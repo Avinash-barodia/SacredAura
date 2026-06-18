@@ -20,7 +20,7 @@ const generateSitemap = async () => {
   console.log("Generating sitemap...");
 
   try {
-    const smStream = new SitemapStream({ hostname: 'https://[yourdomain.com]' });
+    const smStream = new SitemapStream({ hostname: 'https://sacredauratechnology.com' });
     const writePath = path.resolve(__dirname, '../public/sitemap.xml');
     const writeStream = createWriteStream(writePath);
 
