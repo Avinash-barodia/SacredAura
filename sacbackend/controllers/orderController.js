@@ -3,6 +3,7 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Address = require("../models/Address");
 const { calculateOrderTotal } = require("../utils/calculateOrderTotal");
+const OrderLog = require("../models/OrderLog");
 
 const generateOrderId = () => {
   const random = Math.floor(1000 + Math.random() * 9000);
@@ -62,6 +63,21 @@ exports.createOrder = async (req, res) => {
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Paid",
     }], { session });
 
+    // Log the order
+    await OrderLog.create([{
+      user: req.user.id,
+      action: paymentMethod === "COD" ? "SUCCESS" : "INITIATED",
+      paymentMethod,
+      paymentStatus: paymentMethod === "COD" ? "Pending" : "Pending",
+      orderData: {
+        items: validatedItems,
+        subtotal,
+        totalAmount
+      },
+      addressSnapshot: address,
+      mongoOrderId: orderArr[0]._id
+    }], { session });
+
     await session.commitTransaction();
     session.endSession();
 
@@ -95,6 +111,21 @@ exports.createOrder = async (req, res) => {
   } catch (err) {
     await session.abortTransaction();
     session.endSession();
+
+    // Log the failure
+    try {
+      const address = await Address.findById(req.body.addressId);
+      await OrderLog.create({
+        user: req.user ? req.user.id : null,
+        action: "FAILED",
+        paymentMethod: req.body.paymentMethod,
+        errorReason: err.message,
+        addressSnapshot: address || req.body.addressId
+      });
+    } catch (logErr) {
+      console.error("Failed to log order failure:", logErr);
+    }
+
     res.status(500).json({ message: err.message });
   }
 };

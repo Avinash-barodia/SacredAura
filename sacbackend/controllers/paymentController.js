@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const Order = require("../models/Order");
 const sendEmail = require("../utils/email");
 const { calculateOrderTotal } = require("../utils/calculateOrderTotal");
+const OrderLog = require("../models/OrderLog");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_mocked",
@@ -71,9 +72,37 @@ exports.verifyPayment = async (req, res) => {
         } catch (emailErr) {
           console.error("Failed to send Payment email", emailErr);
         }
+
+        // Log the successful payment
+        try {
+          await OrderLog.findOneAndUpdate(
+            { mongoOrderId: order._id },
+            { 
+              action: "SUCCESS",
+              paymentStatus: "Paid",
+              razorpayOrderId: razorpay_order_id 
+            }
+          );
+        } catch (logErr) {
+          console.error("Failed to log payment success:", logErr);
+        }
       }
       return res.status(200).json({ message: "Payment verified successfully" });
     } else {
+      // Log failed payment signature
+      try {
+        await OrderLog.findOneAndUpdate(
+          { mongoOrderId: mongo_order_id },
+          { 
+            action: "FAILED",
+            paymentStatus: "Failed",
+            errorReason: "Invalid Razorpay signature",
+            razorpayOrderId: razorpay_order_id 
+          }
+        );
+      } catch (logErr) {
+        console.error("Failed to log payment failure:", logErr);
+      }
       return res.status(400).json({ message: "Invalid signature sent!" });
     }
   } catch (err) {
