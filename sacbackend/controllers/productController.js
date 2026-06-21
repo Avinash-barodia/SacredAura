@@ -124,7 +124,7 @@ exports.getProducts = async (req, res) => {
       filter.name = { $regex: search, $options: "i" };
     }
 
-    const MAX_LIMIT = 50;
+    const MAX_LIMIT = 1000;
     const page = parseInt(req.query.page) || 1;
     const limit = Math.min(parseInt(req.query.limit) || 12, MAX_LIMIT);
     const skip = (page - 1) * limit;
