@@ -13,7 +13,7 @@ const sendEmail = async (options) => {
 
   // Define email options
   const mailOptions = {
-    from: '"SacredAura Orders" <orders@sacredaura.com>',
+    from: process.env.SMTP_USER ? `"SacredAura" <${process.env.SMTP_USER}>` : '"SacredAura" <orders@sacredaura.com>',
     to: options.email,
     subject: options.subject,
     text: options.message,
@@ -26,6 +26,7 @@ const sendEmail = async (options) => {
     console.log("Email sent successfully to", options.email);
   } catch (error) {
     console.error("Error sending email:", error.message);
+    throw error;
   }
 };
 
