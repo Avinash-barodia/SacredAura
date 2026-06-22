@@ -71,10 +71,18 @@ function SavedAddresses() {
     marginBottom: "10px",
     borderRadius: "6px",
     border: "1px solid #ccc",
+    boxSizing: "border-box",
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "40px auto" }}>
+    <div style={{ maxWidth: "800px", margin: "40px auto", padding: "0 15px", boxSizing: "border-box" }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .mobileFullBtn {
+            width: 100% !important;
+          }
+        }
+      `}</style>
       <h2 style={{ marginBottom: "25px" }}>Delivery Address</h2>
 
       {/* ================= ADDRESS LIST ================= */}
@@ -117,6 +125,7 @@ function SavedAddresses() {
       {/* ================= ADD BUTTON ================= */}
       <button
         onClick={() => setShowForm(!showForm)}
+        className="mobileFullBtn"
         style={{
           padding: "8px 14px",
           borderRadius: "6px",
@@ -213,6 +222,7 @@ function SavedAddresses() {
 
           <button
             onClick={handleSaveAddress}
+            className="mobileFullBtn"
             style={{
               marginTop: "10px",
               padding: "10px 20px",

@@ -96,6 +96,30 @@ function Shop() {
     fetchProducts(page, categoryQuery, searchQuery, page > 1 && products.length > 0);
   }, [searchParams]);
 
+  // Sync sidebar visual state with URL
+  useEffect(() => {
+    const categoryQuery = searchParams.get("category");
+    if (categoryQuery && categories.length > 0) {
+      const matchedCat = categories.find(c => 
+        c._id === categoryQuery || 
+        c.name.toLowerCase().includes(categoryQuery.toLowerCase())
+      );
+      if (matchedCat) {
+        setSelectedCategory(matchedCat._id);
+        if (matchedCat.parent) {
+          const parentId = typeof matchedCat.parent === 'object' ? matchedCat.parent._id : matchedCat.parent;
+          setOpenCategory(parentId);
+        } else {
+          setOpenCategory(matchedCat._id);
+        }
+      } else {
+        setSelectedCategory(null);
+      }
+    } else if (!categoryQuery) {
+      setSelectedCategory(null);
+    }
+  }, [searchParams, categories]);
+
   useEffect(() => {
     const handleResize = () => setScreen(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -110,7 +134,7 @@ function Shop() {
         setLoading(true);
       }
 
-      let url = `/products?page=${page}&limit=12`;
+      let url = `/products?page=${page}&limit=1000`;
       if (categoryId) url += `&category=${categoryId}`;
       if (searchStr) url += `&search=${searchStr}`;
 
@@ -483,25 +507,7 @@ function Shop() {
               ))}
             </div>
 
-            {/* LOAD MORE BUTTON / TEXT */}
-            {currentPage < totalPages ? (
-              <button
-                className={styles.loadMoreBtn}
-                onClick={handleLoadMore}
-                disabled={isFetchingMore}
-              >
-                {isFetchingMore ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div className={styles.loadingSpinner} style={{ width: "16px", height: "16px", borderWidth: "2px" }}></div>
-                    Loading...
-                  </div>
-                ) : (
-                  "Load More"
-                )}
-              </button>
-            ) : sortedProducts.length > 0 ? (
-              <p className={styles.allLoadedText}>You've seen it all</p>
-            ) : null}
+            {/* No Load More Button */}
           </>
         )}
       </div>

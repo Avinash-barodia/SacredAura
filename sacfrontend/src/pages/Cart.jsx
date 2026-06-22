@@ -19,7 +19,10 @@ function Cart() {
   useEffect(() => {
     // Fetch some products for the recommended section
     api.get("/products")
-      .then(res => setRecommended(res.data.slice(0, 8)))
+      .then(res => {
+        const productList = res.data.products || res.data;
+        setRecommended(productList.slice(0, 8));
+      })
       .catch(err => {
         console.error(err);
         toast.error(err?.response?.data?.message || "Failed to load recommended products.");
@@ -91,10 +94,11 @@ function Cart() {
       <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", alignItems: "flex-start" }}>
         
         {/* ================= LEFT SECTION: CART ITEMS (70%) ================= */}
-        <div style={{ flex: "1 1 65%", display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div className="cartLeft" style={{ flex: "1 1 65%", display: "flex", flexDirection: "column", gap: "24px" }}>
           {cart.map((item) => (
             <div 
               key={item._id}
+              className="cartItem"
               style={{
                 background: "white",
                 borderRadius: "20px",
@@ -119,6 +123,7 @@ function Cart() {
               <img
                 src={item.mainImage || item.image}
                 alt={item.name}
+                className="cartItemImg"
                 style={{
                   width: "80px",
                   height: "80px",
@@ -127,7 +132,7 @@ function Cart() {
                 }}
               />
               
-              <div style={{ flex: 1 }}>
+              <div className="cartItemDetails" style={{ flex: 1 }}>
                 <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0F172A", margin: "0 0 6px 0", lineHeight: "1.3" }}>
                   {item.name}
                 </h3>
@@ -146,7 +151,7 @@ function Cart() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+              <div className="cartItemActions" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
                 <div style={{ 
                   display: "flex", 
                   alignItems: "center", 
@@ -214,7 +219,7 @@ function Cart() {
         </div>
 
         {/* ================= RIGHT SECTION: ORDER SUMMARY (30%) ================= */}
-        <div style={{ flex: "1 1 30%", minWidth: "280px", position: "sticky", top: "120px" }}>
+        <div className="cartRight" style={{ flex: "1 1 30%", minWidth: "280px", position: "sticky", top: "120px" }}>
           <div style={{
             background: "linear-gradient(180deg, #FFFFFF, #F8FBFF)",
             borderRadius: "20px",
@@ -357,6 +362,46 @@ function Cart() {
         </div>
       )}
 
+      <style>{`
+        @media (max-width: 768px) {
+          .cartLeft, .cartRight {
+            flex: 1 1 100% !important;
+          }
+          .cartRight {
+            position: static !important;
+            margin-top: 12px !important;
+          }
+          .cartItem {
+            flex-wrap: wrap !important;
+            padding: 16px !important;
+            gap: 16px !important;
+          }
+          .cartItemImg {
+            width: 80px !important;
+            height: 80px !important;
+          }
+          .cartItemDetails {
+            flex: 1 1 calc(100% - 100px) !important;
+            min-width: 150px !important;
+          }
+          .cartItemActions {
+            flex-direction: row !important;
+            width: 100% !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+            padding-top: 12px !important;
+            border-top: 1px dashed #E2E8F0 !important;
+          }
+          .cartItemActions > p {
+            margin: 0 !important;
+            text-align: left !important;
+            width: 100% !important;
+            order: -1 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

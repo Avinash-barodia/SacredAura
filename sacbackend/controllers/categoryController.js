@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const apicache = require("apicache");
 
 // Create Category or Subcategory
 const createCategory = async (req, res) => {
@@ -11,6 +12,7 @@ const createCategory = async (req, res) => {
     });
 
     await category.save();
+    apicache.clear();
     res.json(category);
 
   } catch (error) {
@@ -43,6 +45,7 @@ const deleteCategory = async (req, res) => {
 
     await Category.findByIdAndDelete(id);
 
+    apicache.clear();
     res.json({ message: "Category deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

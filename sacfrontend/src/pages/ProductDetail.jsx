@@ -132,6 +132,7 @@ function ProductDetail() {
       </button> */}
       {/* TOP SECTION */}
       <div
+        className="productTopSection"
         style={{
           display: "flex",
           flexWrap: "wrap",
@@ -139,7 +140,7 @@ function ProductDetail() {
         }}
       >
         {/* LEFT IMAGE SECTION */}
-           <div style={{ flex: "1 1 500px" }}>
+           <div className="productLeft" style={{ flex: "1 1 500px" }}>
            <div
             style={{
               border: "1px solid #eee",
@@ -220,7 +221,7 @@ function ProductDetail() {
       </div>
 
         {/* RIGHT DETAILS SECTION */}
-        <div style={{ flex: "1 1 400px" }}>
+        <div className="productRight" style={{ flex: "1 1 400px" }}>
           <h2 style={{ marginBottom: "10px" }}>{product.name}</h2>
 
           <p style={{ color: "#6c757d" }}>
@@ -289,7 +290,7 @@ function ProductDetail() {
               )}
             </div>
 
-          <div style={{ marginTop: "25px", display: "flex", gap: "15px" }}>
+          <div className="productActionButtons" style={{ marginTop: "25px", display: "flex", gap: "15px" }}>
   {product.stock === 0 ? (
     <button
       style={{
@@ -308,6 +309,7 @@ function ProductDetail() {
       {/* 🔵 ADD TO CART (LEFT) */}
       <button
         onClick={() => handleAddToCart("cart")}
+        className="actionBtn"
         style={{
           padding: "12px 50px",
           background: "#007bff",
@@ -324,6 +326,7 @@ function ProductDetail() {
       {/* 🟢 BUY NOW (RIGHT) */}
       <button
         onClick={() => handleAddToCart("checkout")}
+        className="actionBtn"
         style={{
           padding: "12px 50px",
           background: "#28a745",
@@ -440,6 +443,23 @@ function ProductDetail() {
                  )}
               </div>
     </div>
+    <style>{`
+      @media (max-width: 768px) {
+        .productTopSection {
+          gap: 30px !important;
+        }
+        .productLeft, .productRight {
+          flex: 1 1 100% !important;
+        }
+        .productActionButtons {
+          flex-direction: column !important;
+          gap: 12px !important;
+        }
+        .actionBtn {
+          width: 100% !important;
+        }
+      }
+    `}</style>
   </div>
 );
 

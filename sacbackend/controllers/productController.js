@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const apicache = require("apicache");
 const cloudinary = require("../config/cloudinary");
 const Category = require("../models/Category");
 
@@ -85,6 +86,7 @@ exports.createProduct = async (req, res) => {
       rating: Number(avgRating.toFixed(1)),
     });
 
+    apicache.clear();
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -252,6 +254,7 @@ exports.updateProduct = async (req, res) => {
       { new: true }
     );
 
+    apicache.clear();
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -262,6 +265,7 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
+    apicache.clear();
     res.json({ message: "Product deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -287,6 +291,7 @@ exports.updateFeaturedProducts = async (req, res) => {
       );
     }
 
+    apicache.clear();
     res.json({ message: "Featured products updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });

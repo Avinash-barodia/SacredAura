@@ -68,7 +68,14 @@ function AccountSettings() {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "40px auto" }}>
+    <div style={{ maxWidth: "800px", margin: "40px auto", padding: "0 15px", boxSizing: "border-box" }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .mobileFullBtn {
+            width: 100% !important;
+          }
+        }
+      `}</style>
       <h2>Account Settings</h2>
 
       {/* ================= EDIT PROFILE ================= */}
@@ -102,7 +109,7 @@ function AccountSettings() {
           style={inputStyle}
         />
 
-        <button onClick={handleUpdateProfile} style={buttonStyle}>
+        <button onClick={handleUpdateProfile} style={buttonStyle} className="mobileFullBtn">
           Save Changes
         </button>
       </div>
@@ -137,7 +144,7 @@ function AccountSettings() {
           style={inputStyle}
         />
 
-        <button onClick={handleChangePassword} style={buttonStyle}>
+        <button onClick={handleChangePassword} style={buttonStyle} className="mobileFullBtn">
           Update Password
         </button>
       </div>
@@ -151,6 +158,7 @@ const inputStyle = {
   marginTop: "15px",
   borderRadius: "6px",
   border: "1px solid #ccc",
+  boxSizing: "border-box",
 };
 
 const buttonStyle = {

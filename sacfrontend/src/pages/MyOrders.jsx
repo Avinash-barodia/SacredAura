@@ -52,7 +52,7 @@ function MyOrders() {
   };
 
   return (
-    <div style={{ maxWidth: "900px", margin: "40px auto" }}>
+    <div style={{ maxWidth: "900px", margin: "40px auto", padding: "0 15px", boxSizing: "border-box" }}>
       <h2>Your Orders</h2>
 
       {orders.length === 0 && <p>No Orders Found</p>}

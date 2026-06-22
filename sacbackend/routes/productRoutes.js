@@ -1,6 +1,8 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const apicache = require("apicache");
+const cache = apicache.middleware;
 const Product = require("../models/Product");
 
 const {
@@ -40,10 +42,10 @@ router.post(
   createProduct
 );
 
-router.get("/", getProducts);
+router.get("/", cache("5 minutes"), getProducts);
 router.get("/admin", protect, isAdmin, getAdminProducts);
 
-router.get("/home/:subcategoryId", async (req, res) => {
+router.get("/home/:subcategoryId", cache("5 minutes"), async (req, res) => {
   try {
     let products = await Product.find({
       category: req.params.subcategoryId,

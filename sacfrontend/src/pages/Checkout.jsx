@@ -241,7 +241,7 @@ function Checkout() {
       <div style={{ display: "flex", gap: "32px", flexWrap: "wrap", alignItems: "flex-start" }}>
 
         {/* ================= LEFT SIDE (65%) ================= */}
-        <div style={{ flex: "1 1 60%", display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div className="checkoutLeft" style={{ flex: "1 1 60%", display: "flex", flexDirection: "column", gap: "24px" }}>
 
           {/* ADDRESS SECTION */}
           <div style={{ background: "white", borderRadius: "20px", boxShadow: "0 8px 24px rgba(0,90,200,0.06)", padding: "32px" }}>
@@ -297,7 +297,7 @@ function Checkout() {
             {/* New Address Form */}
             {showNewForm && (
               <div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
+                <div className="addressGrid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
                   <input style={inputStyle} placeholder="Country" onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })} />
                   <input style={inputStyle} placeholder="First Name" onChange={(e) => setNewAddress({ ...newAddress, firstName: e.target.value })} />
                   <input style={inputStyle} placeholder="Last Name" onChange={(e) => setNewAddress({ ...newAddress, lastName: e.target.value })} />
@@ -306,7 +306,7 @@ function Checkout() {
                   <input style={inputStyle} placeholder="City" onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })} />
                   <input style={inputStyle} placeholder="State" onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })} />
                   <input style={inputStyle} placeholder="Pin Code" value={newAddress.pinCode || ""} onChange={(e) => setNewAddress({ ...newAddress, pinCode: e.target.value.replace(/\D/g, '') })} />
-                  <input style={{...inputStyle, gridColumn: "span 2"}} placeholder="Phone Number" value={newAddress.phone || ""} onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value.replace(/\D/g, '') })} />
+                  <input className="fullWidthInput" style={{...inputStyle, gridColumn: "span 2"}} placeholder="Phone Number" value={newAddress.phone || ""} onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value.replace(/\D/g, '') })} />
                 </div>
                 <div style={{ display: "flex", gap: "16px" }}>
                   <button onClick={saveAddress} style={{ background: "#0077FF", color: "white", border: "none", borderRadius: "10px", padding: "14px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer", flex: 1 }}>
@@ -329,7 +329,7 @@ function Checkout() {
               Payment Method
             </h3>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div className="paymentGrid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
               {/* COD Option */}
               <div 
                 onClick={() => setPaymentMethod("COD")}
@@ -381,7 +381,7 @@ function Checkout() {
           </div>
 
           {/* ACTION BUTTON */}
-          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <div className="checkoutAction" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <button
               onClick={placeOrder}
               style={{
@@ -400,7 +400,7 @@ function Checkout() {
         </div>
 
         {/* ================= RIGHT SIDE: ORDER DETAILS (35%) ================= */}
-        <div style={{ flex: "1 1 35%", minWidth: "320px", position: "sticky", top: "120px" }}>
+        <div className="checkoutRight" style={{ flex: "1 1 35%", minWidth: "320px", position: "sticky", top: "120px" }}>
           <div style={{
             background: "white",
             borderRadius: "20px",
@@ -509,6 +509,33 @@ function Checkout() {
         </div>
 
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .checkoutLeft, .checkoutRight {
+            flex: 1 1 100% !important;
+          }
+          .checkoutRight {
+            position: static !important;
+            margin-top: 12px !important;
+            min-width: 100% !important;
+          }
+          .addressGrid, .paymentGrid {
+            grid-template-columns: 1fr !important;
+          }
+          .fullWidthInput {
+            grid-column: span 1 !important;
+          }
+          .checkoutAction {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 16px !important;
+          }
+          .checkoutAction button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

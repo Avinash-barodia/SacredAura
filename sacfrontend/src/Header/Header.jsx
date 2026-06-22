@@ -37,23 +37,23 @@ export default function Header() {
   return (
     <>
       <header style={headerStyle}>
-        <div style={inner}>
+        <div style={inner} className="innerContainer">
 
           {/* LEFT */}
           <div style={leftBlock}>
 
-            {/*LOGO FIRST */}
-            <Link to="/" className="logoBox">
-              <img src={logo} alt="logo" />
-            </Link>
-
-            {/* HAMBURGER AFTER LOGO */}
+            {/* HAMBURGER FIRST */}
             <div
               className="hamburger"
               onClick={() => setMobileMenu(!mobileMenu)}
             >
               <FaBars />
             </div>
+
+            {/*LOGO */}
+            <Link to="/" className="logoBox">
+              <img src={logo} alt="logo" />
+            </Link>
 
             {/* DESKTOP SEARCH */}
             <div style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }} className="searchInput">
@@ -180,6 +180,12 @@ export default function Header() {
           flex-direction: column;
           padding: 15px;
           gap: 12px;
+          position: fixed;
+          top: 100px;
+          left: 0;
+          width: 100%;
+          z-index: 999;
+          box-sizing: border-box;
         }
 
         .mobileMenu a {
@@ -189,12 +195,24 @@ export default function Header() {
 
         @media (max-width: 768px) {
 
+          .innerContainer {
+            padding: 0 15px !important;
+            gap: 10px !important;
+            position: relative;
+          }
+
+          .logoBox {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
           .desktopNav {
             display: none !important;
           }
 
           .searchInput {
-            display: none;
+            display: none !important;
           }
 
           .hamburger {
