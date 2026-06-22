@@ -12,6 +12,7 @@ const {
   updateProduct,
   deleteProduct,
   updateFeaturedProducts,
+  getProductById,
 } = require("../controllers/productController");
 
 const router = express.Router();
@@ -69,6 +70,8 @@ router.get("/home/:subcategoryId", cache("5 minutes"), async (req, res) => {
 });
 
 router.put("/home/featured", protect, isAdmin, updateFeaturedProducts);
+
+router.get("/:id", cache("5 minutes"), getProductById);
 
 router.put(
   "/:id",

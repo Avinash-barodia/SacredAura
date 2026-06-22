@@ -38,14 +38,18 @@ function ProductDetail() {
   };
 
   const fetchProduct = async () => {
-    const res = await api.get("/products");
-    const found = res.data.find((p) => p._id === id);
-    setProduct(found);
+    try {
+      const res = await api.get(`/products/${id}`);
+      const found = res.data;
+      setProduct(found);
 
-    if (found?.mainImage) {
-      setActiveImage(found.mainImage);
-    } else if (found?.image) {
-      setActiveImage(found.image);
+      if (found?.mainImage) {
+        setActiveImage(found.mainImage);
+      } else if (found?.image) {
+        setActiveImage(found.image);
+      }
+    } catch (err) {
+      console.error("Failed to load product", err);
     }
   };
 
