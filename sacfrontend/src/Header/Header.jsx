@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const ref = useRef();
 
   const { user, logout } = useAuth();
@@ -32,6 +33,16 @@ export default function Header() {
     logout();
     setOpen(false);
     navigate("/");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setMobileMenu(false);
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+    } else {
+      navigate(`/shop`);
+    }
   };
 
   return (
@@ -57,14 +68,16 @@ export default function Header() {
 
             {/* DESKTOP SEARCH */}
             <div style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }} className="searchInput">
-              <div style={{ position: "relative", width: "100%", maxWidth: "600px", minWidth: "150px" }}>
+              <form onSubmit={handleSearch} style={{ position: "relative", width: "100%", maxWidth: "600px", minWidth: "150px" }}>
                 <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#9CA3AF" }}>🔍</span>
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Search products (Press Enter)..."
                   style={searchBox}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
-              </div>
+              </form>
             </div>
 
             {/* DESKTOP NAV */}
@@ -153,6 +166,17 @@ export default function Header() {
             exit={{ opacity: 0, height: 0 }}
             style={{ overflow: "hidden", background: "#041C32" }}
           >
+          {/* MOBILE SEARCH */}
+          <form onSubmit={handleSearch} style={{ position: "relative", width: "100%", marginBottom: "10px" }}>
+            <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#9CA3AF" }}>🔍</span>
+            <input
+              type="text"
+              placeholder="Search products (Press Enter)..."
+              style={{...searchBox, width: "100%", padding: "12px 12px 12px 40px"}}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </form>
           <Link to="/" onClick={() => setMobileMenu(false)}>Home</Link>
           <Link to="/about" onClick={() => setMobileMenu(false)}>About Us</Link>
           <Link to="/shop" onClick={() => setMobileMenu(false)}>Shop</Link>

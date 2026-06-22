@@ -127,7 +127,13 @@ exports.getProducts = async (req, res) => {
     }
 
     if (search) {
-      filter.name = { $regex: search, $options: "i" };
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+        { modelNumber: { $regex: search, $options: "i" } },
+        { highlights: { $regex: search, $options: "i" } },
+        { keyIngredients: { $regex: search, $options: "i" } }
+      ];
     }
 
     const MAX_LIMIT = 1000;
