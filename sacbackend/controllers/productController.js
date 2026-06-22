@@ -104,9 +104,13 @@ exports.getProducts = async (req, res) => {
       // If category is a name instead of an ObjectId, try to find the actual category
       const mongoose = require("mongoose");
       if (!mongoose.Types.ObjectId.isValid(category)) {
-        const catByName = await Category.findOne({ name: { $regex: `^${category}$`, $options: "i" } });
+        // Use loose regex (without ^ and $) so "Water Taps" matches "Autoamtic Water Taps"
+        const catByName = await Category.findOne({ name: { $regex: category, $options: "i" } });
         if (catByName) {
           categoryId = catByName._id.toString();
+        } else {
+          // Prevent CastError if category string doesn't match anything
+          categoryId = new mongoose.Types.ObjectId().toString();
         }
       }
 
