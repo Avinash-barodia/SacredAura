@@ -135,6 +135,10 @@ export default function LoginSignup() {
             font-family: 'Inter', sans-serif;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
+        }
+        .auth-page-container * {
+            box-sizing: border-box;
         }
         .auth-page-container::before {
             content: "";
