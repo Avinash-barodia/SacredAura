@@ -46,6 +46,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.set("trust proxy", 1); // 🔥 Trust Hostinger's reverse proxy so IPs are tracked correctly
+
 const orderLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -54,7 +56,7 @@ const orderLimiter = rateLimit({
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 3000, // Increased from 100 to 3000
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: "Too many requests, please try again later." },
