@@ -6,7 +6,7 @@ const { signupValidator, loginValidator, forgotPasswordValidator, resetPasswordV
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 200, // Increased from 10 to 200 to prevent false positive lockouts
   message: { message: "Too many requests, please try again later" },
 });
 
