@@ -127,12 +127,24 @@ exports.getProducts = async (req, res) => {
     }
 
     if (search) {
+      // Split search into words and naively singularize (e.g. locks -> locks?)
+      const searchTerms = search.trim().split(/\s+/).map(term => {
+        if (term.toLowerCase().endsWith('s') && term.length > 3) {
+            return term.slice(0, -1) + 's?';
+        }
+        return term;
+      });
+      
+      // Use lookahead to match all terms regardless of order
+      const regexPattern = searchTerms.map(term => `(?=.*${term})`).join('');
+      const regex = { $regex: regexPattern, $options: "i" };
+
       filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
-        { modelNumber: { $regex: search, $options: "i" } },
-        { highlights: { $regex: search, $options: "i" } },
-        { keyIngredients: { $regex: search, $options: "i" } }
+        { name: regex },
+        { description: regex },
+        { modelNumber: regex },
+        { highlights: regex },
+        { keyIngredients: regex }
       ];
     }
 
