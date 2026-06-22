@@ -3,8 +3,17 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedAdminRoute = ({ children }) => {
 
-  const user = JSON.parse(localStorage.getItem("user"));
- 
+  let user = null;
+  try {
+    const item = localStorage.getItem("user");
+    if (!item || item === "undefined") {
+      localStorage.removeItem("user");
+    } else {
+      user = JSON.parse(item);
+    }
+  } catch (err) {
+    localStorage.removeItem("user");
+  }
   if (!user) {
     return <Navigate to="/login" replace />;
   }

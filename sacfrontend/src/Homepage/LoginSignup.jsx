@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import { Mail, Lock, User, Phone, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, User, Phone, CircleCheck } from "lucide-react";
 import { useGoogleLogin } from "@react-oauth/google";
 
 const GoogleIcon = () => (
@@ -399,7 +399,7 @@ export default function LoginSignup() {
             
             {verificationSentTo ? (
               <div style={{ textAlign: "center" }}>
-                <CheckCircle2 size={64} color="#16A34A" style={{ margin: "0 auto 24px" }} />
+                <CircleCheck size={64} color="#16A34A" style={{ margin: "0 auto 24px" }} />
                 <h2 className="auth-header">Check Your Email</h2>
                 <p className="auth-subtext" style={{ marginBottom: "24px" }}>
                   We've sent a verification email to <strong>{verificationSentTo}</strong>.<br/>

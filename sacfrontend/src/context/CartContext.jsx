@@ -12,9 +12,15 @@ export const CartProvider = ({ children }) => {
 
   // Load from localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+    try {
+      const savedCart = localStorage.getItem("cart");
+      if (!savedCart || savedCart === "undefined") {
+        localStorage.removeItem("cart");
+      } else {
+        setCart(JSON.parse(savedCart));
+      }
+    } catch (err) {
+      localStorage.removeItem("cart");
     }
   }, []);
 

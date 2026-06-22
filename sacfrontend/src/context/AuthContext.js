@@ -3,10 +3,22 @@ import api from "../utils/api";
 
 const AuthContext = createContext();
 
+const getUserFromStorage = () => {
+  try {
+    const item = localStorage.getItem("user");
+    if (!item || item === "undefined") {
+      localStorage.removeItem("user");
+      return null;
+    }
+    return JSON.parse(item);
+  } catch (err) {
+    localStorage.removeItem("user");
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+  const [user, setUser] = useState(getUserFromStorage());
 
   /* ===== LOGIN ===== */
   const login = async (email, password) => {
@@ -18,8 +30,10 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (data) => {
     const res = await api.post("/auth/signup", data);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
-    setUser(res.data.user);
+    if (res.data.user) {
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user);
+    }
     return res.data;
   };
 
