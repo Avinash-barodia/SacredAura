@@ -139,6 +139,15 @@ exports.getProducts = async (req, res) => {
       const regexPattern = searchTerms.map(term => `(?=.*${term})`).join('');
       const regex = { $regex: regexPattern, $options: "i" };
 
+      // Find categories that match the search term
+      const matchingCategories = await Category.find({ name: regex });
+      let matchingCategoryIds = matchingCategories.map(c => c._id);
+      
+      if (matchingCategoryIds.length > 0) {
+        const subCategories = await Category.find({ parent: { $in: matchingCategoryIds } });
+        matchingCategoryIds = [...matchingCategoryIds, ...subCategories.map(sub => sub._id)];
+      }
+
       filter.$or = [
         { name: regex },
         { description: regex },
@@ -146,6 +155,10 @@ exports.getProducts = async (req, res) => {
         { highlights: regex },
         { keyIngredients: regex }
       ];
+
+      if (matchingCategoryIds.length > 0) {
+        filter.$or.push({ category: { $in: matchingCategoryIds } });
+      }
     }
 
     const MAX_LIMIT = 1000;
