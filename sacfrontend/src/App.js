@@ -36,7 +36,7 @@ function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isOrderSuccess = location.pathname === "/order-success";

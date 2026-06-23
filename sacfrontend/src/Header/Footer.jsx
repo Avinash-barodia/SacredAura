@@ -55,9 +55,9 @@ export default function Footer() {
         <div>
           <FooterTitle title="Shop" />
           <FooterLink text="All Products" to="/shop" />
-          <FooterLink text="Home Automation" to="/shop" />
-          <FooterLink text="Light Automation" to="/shop" />
-          <FooterLink text="Hygiene Automation" to="/shop" />
+          <FooterLink text="Home Automation" to="/shop?category=Home%20Automation" />
+          <FooterLink text="Light Automation" to="/shop?category=Light%20Automation" />
+          <FooterLink text="Hygiene Automation" to="/shop?category=Hygiene%20Automation" />
         </div>
 
         {/* Column 3: Company */}
@@ -101,7 +101,7 @@ const FooterTitle = ({ title }) => (
 );
 
 const FooterLink = ({ text, to }) => (
-  <Link to={to} style={{ textDecoration: "none", display: "block", marginBottom: "12px" }}>
+  <Link to={to} style={{ textDecoration: "none", display: "block", marginBottom: "12px" }} onClick={() => window.scrollTo(0, 0)}>
     <span
       style={{
         fontSize: "14px",
