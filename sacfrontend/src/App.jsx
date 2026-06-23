@@ -34,6 +34,7 @@ const ForgotPassword = React.lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 const VerifyEmailPage = React.lazy(() => import("./pages/VerifyEmailPage"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
+const OrderDetail = React.lazy(() => import("./pages/OrderDetail"));
 
 function App() {
   const location = useLocation();
@@ -82,6 +83,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/orders/:id" element={<OrderDetail />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/accsettings" element={<AccountSettings/>} />
         <Route path="/adresses" element={<SavedAddresses/>} />
