@@ -34,23 +34,21 @@ Sentry.init({
 });
 
 app.use(helmet({ contentSecurityPolicy: false }));
+const allowedOrigins = [
+  "http://localhost:3000", 
+  "http://localhost:5173", 
+  "https://sacredauratechnology.com", 
+  "https://www.sacredauratechnology.com"
+];
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      "http://localhost:3000", 
-      "http://localhost:5173", 
-      "https://sacredauratechnology.com", 
-      "https://www.sacredauratechnology.com"
-    ];
-    // If no origin (e.g., server-to-server) or allowed, reflect origin
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin || true);
-    } else {
-      callback(null, allowedOrigins[0]); // Fallback
-    }
-  },
+  origin: allowedOrigins,
   credentials: true
 }));
+
+app.use((req, res, next) => {
+  res.setHeader("Vary", "Origin");
+  next();
+});
 app.use(express.json());
 app.use(cookieParser());
 
