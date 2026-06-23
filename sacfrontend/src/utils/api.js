@@ -8,4 +8,13 @@ const api = axios.create({
   },
 });
 
+// Add interceptor to bypass aggressive Hostinger CDN caching
+api.interceptors.request.use((config) => {
+  if (config.method === 'get') {
+    config.params = config.params || {};
+    config.params._t = Date.now();
+  }
+  return config;
+});
+
 export default api;
